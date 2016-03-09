@@ -1,7 +1,10 @@
 package com.rick.tools.xml.test;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -12,7 +15,9 @@ import org.xml.sax.SAXException;
 
 import com.rick.tools.xml.XmlDocument;
 import com.rick.tools.xml.common.ConDefine;
+import com.rick.tools.xml.dom.DomForXML;
 import com.rick.tools.xml.dom4j.Dom4jForXML;
+import com.rick.tools.xml.model.BookStoreModel;
 import com.rick.tools.xml.sax.SaxForXML;
 
 public class XMLTest {
@@ -47,5 +52,24 @@ public class XMLTest {
         // step 3: 开始进行解析
         // 传入待解析的文档的处理器
         parser.parse(new File(ConDefine.BK_PATH), new SaxForXML());
+	}
+	
+	/**
+	 * DOM解析XML测试方法
+	 * @throws Exception
+	 */
+	@Test
+	public void domTest() throws Exception{
+//		InputStream input = this.getClass().getClassLoader().getResourceAsStream(ConDefine.BK_PATH);  
+		InputStream input = new FileInputStream(ConDefine.BK_PATH);
+		DomForXML dom = new DomForXML();  
+        List<BookStoreModel> books = dom.getBooks(input);  
+        for(BookStoreModel book : books){  
+        	System.err.print(" -------- \n");
+            System.out.println("title : "+book.getTitle());
+            System.out.println("author : "+book.getAuthor());
+            System.out.println("year : "+book.getYear());
+            System.out.println("price : "+book.getPrice());  
+        }
 	}
 }
